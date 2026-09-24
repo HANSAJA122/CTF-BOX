@@ -1,79 +1,69 @@
 import React from 'react';
-import { CheckCircle2, Terminal, Award, HelpCircle, ArrowRight } from 'lucide-react';
+import { Flag, CheckCircle2, Terminal, Award, ArrowRight } from 'lucide-react';
 
 const ChallengeCard = ({ challenge, onOpenModal }) => {
-  const { title, category, difficulty, points, isSolved, containerPort, hints } = challenge;
+  const { title, category, difficulty, points, isSolved, containerPort } = challenge;
 
-  const getDifficultyBadge = (diff) => {
-    switch (diff) {
-      case 'Easy':
-        return 'badge-easy';
-      case 'Medium':
-        return 'badge-medium';
-      case 'Hard':
-        return 'badge-hard';
-      default:
-        return 'badge-easy';
-    }
+  const getCategoryClass = (cat) => {
+    if (cat.includes('Web')) return 'cat-web';
+    if (cat.includes('Crypto')) return 'cat-crypto';
+    if (cat.includes('Forensics')) return 'cat-forensics';
+    if (cat.includes('Linux')) return 'cat-linux';
+    if (cat.includes('Stego')) return 'cat-stego';
+    return 'cat-osint';
   };
 
   return (
     <div
-      className={`htb-card p-5 flex flex-col justify-between relative group ${
-        isSolved ? 'htb-card-active' : ''
+      className={`gctf-card p-5 flex flex-col justify-between relative group ${
+        isSolved ? 'border-[#34a853]/50 bg-[#101625]' : ''
       }`}
     >
       <div>
-        {/* Top Badges Row */}
+        {/* Header Tags */}
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="domain-pill truncate max-w-[150px]">{category}</span>
-          <div className="flex items-center gap-1.5">
-            <span className={getDifficultyBadge(difficulty)}>{difficulty}</span>
+          <span className={`px-2 py-0.5 rounded font-mono text-[10px] uppercase font-bold ${getCategoryClass(category)}`}>
+            {category}
+          </span>
+          
+          <div className="flex items-center gap-1.5 font-mono text-xs">
+            <span className="text-slate-400 font-semibold">{difficulty}</span>
             {isSolved && (
-              <span className="badge-solved flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-[#06b6d4]" />
-                SOLVED
+              <span className="text-[#34a853] font-bold flex items-center gap-1">
+                ✓ SOLVED
               </span>
             )}
           </div>
         </div>
 
-        {/* Title */}
-        <h3 className="text-base font-mono font-bold text-slate-100 group-hover:text-[#10b981] transition-colors mb-2 line-clamp-1">
+        {/* Challenge Name */}
+        <h3 className="text-base font-mono font-bold text-slate-100 group-hover:text-[#4285f4] transition-colors mb-2 line-clamp-1">
           {title}
         </h3>
 
-        {/* Meta Stats Row */}
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-400 my-4 py-2 px-3 bg-[#0b0e14] border border-[#1f293d] rounded">
-          <div className="flex items-center gap-1 text-amber-400 font-bold">
-            <Award className="w-3.5 h-3.5" />
-            <span>{points} PTS</span>
+        {/* Target Meta Information */}
+        <div className="bg-[#080b14] border border-[#1e293b] p-3 rounded my-4 space-y-1.5 font-mono text-xs">
+          <div className="flex justify-between items-center text-slate-400">
+            <span>Points:</span>
+            <span className="text-[#fbbc04] font-bold">{points} PTS</span>
           </div>
-
-          <div className="flex items-center gap-1 text-slate-400">
-            <Terminal className="w-3.5 h-3.5 text-[#10b981]" />
-            <span>PORT: <strong className="text-slate-200">{containerPort}</strong></span>
+          <div className="flex justify-between items-center text-slate-400">
+            <span>Target Port:</span>
+            <span className="text-[#34a853] font-bold">{containerPort}</span>
           </div>
-
-          {hints && hints.length > 0 && (
-            <div className="flex items-center gap-1 text-cyan-400 ml-auto">
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>{hints.length} HINTS</span>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Footer Action Button */}
+      {/* Action Button */}
       <button
         onClick={() => onOpenModal(challenge)}
-        className={`w-full py-2 px-3 rounded text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 ${
+        className={`w-full py-2 px-3 rounded font-mono text-xs font-bold transition-all flex items-center justify-center gap-2 ${
           isSolved
-            ? 'bg-[#1a2332] text-[#06b6d4] border border-[#06b6d4]/40 hover:bg-[#06b6d4]/10'
-            : 'htb-btn-primary'
+            ? 'gctf-btn-secondary text-[#34a853]'
+            : 'gctf-btn-blue'
         }`}
       >
-        <span>{isSolved ? 'REVIEW SOLVED TARGET' : 'SPAWN TARGET'}</span>
+        <span>{isSolved ? '[ REVIEW TASK ]' : '[ SOLVE TASK ]'}</span>
         <ArrowRight className="w-3.5 h-3.5" />
       </button>
     </div>

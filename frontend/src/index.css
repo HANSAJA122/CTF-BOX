@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -8,149 +8,141 @@
 }
 
 body {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  background-color: #05080c;
-  color: #8c9ba5;
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #0c101c;
+  color: #94a3b8;
   min-height: 100vh;
   overflow-x: hidden;
-  font-size: 12px;
+  font-size: 13px;
 }
 
-/* Custom Thin Scrollbar */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #05080c;
+  background: #0c101c;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1c2436;
+  background: #1e293b;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a3650;
+  background: #334155;
 }
 
-/* SOC Panel Component */
-.soc-panel {
-  background-color: #090d14;
-  border: 1px solid #1c2436;
-  border-radius: 2px;
+/* Google CTF Card Styling */
+.gctf-card {
+  background-color: #101625;
+  border: 1px solid #1e293b;
+  border-radius: 4px;
+  transition: border-color 0.15s ease;
 }
 
-.soc-panel-header {
-  background-color: #0d111a;
-  border-b: 1px solid #1c2436;
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #d1d5db;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.gctf-card:hover {
+  border-color: #4285f4;
 }
 
-/* Dense SOC Table Styling */
-.soc-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-size: 11px;
-}
-
-.soc-table th {
-  background-color: #0d111a;
-  border-bottom: 1px solid #1c2436;
-  color: #6b7280;
-  padding: 6px 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.soc-table td {
-  padding: 6px 12px;
-  border-bottom: 1px solid #141a27;
-  color: #9ca3af;
-}
-
-.soc-table tr:hover td {
-  background-color: #0d131f;
-  color: #e5e7eb;
-}
-
-/* SOC Buttons */
-.soc-btn-green {
-  background-color: #10b981;
-  color: #05080c;
-  font-weight: 700;
-  font-size: 11px;
-  padding: 4px 10px;
-  border: 1px solid #10b981;
-  border-radius: 2px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.soc-btn-green:hover {
-  background-color: #059669;
-  border-color: #059669;
-}
-
-.soc-btn-secondary {
-  background-color: #0d111a;
-  color: #9ca3af;
-  font-size: 11px;
-  padding: 4px 10px;
-  border: 1px solid #1c2436;
-  border-radius: 2px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.soc-btn-secondary:hover {
-  background-color: #141a27;
+/* Google CTF Button Styles */
+.gctf-btn-green {
+  background-color: #34a853;
   color: #ffffff;
-  border-color: #2a3650;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease;
 }
 
-/* Badges */
-.badge-easy {
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  background-color: rgba(16, 185, 129, 0.05);
-  padding: 1px 6px;
-  font-size: 10px;
-  border-radius: 2px;
+.gctf-btn-green:hover {
+  background-color: #2e9647;
 }
 
-.badge-medium {
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  background-color: rgba(245, 158, 11, 0.05);
-  padding: 1px 6px;
-  font-size: 10px;
-  border-radius: 2px;
+.gctf-btn-blue {
+  background-color: #4285f4;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease;
 }
 
-.badge-hard {
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  background-color: rgba(239, 68, 68, 0.05);
-  padding: 1px 6px;
-  font-size: 10px;
-  border-radius: 2px;
+.gctf-btn-blue:hover {
+  background-color: #3367d6;
 }
 
-.badge-solved {
-  color: #06b6d4;
-  border: 1px solid rgba(6, 182, 212, 0.4);
-  background-color: rgba(6, 182, 212, 0.05);
-  padding: 1px 6px;
-  font-size: 10px;
-  border-radius: 2px;
+.gctf-btn-secondary {
+  background-color: #182235;
+  color: #cbd5e1;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: 1px solid #1e293b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.gctf-btn-secondary:hover {
+  background-color: #202d46;
+  border-color: #334155;
+  color: #ffffff;
+}
+
+/* Category Badges with Google Color Palette */
+.cat-web {
+  color: #4285f4;
+  border: 1px solid rgba(66, 133, 244, 0.4);
+  background: rgba(66, 133, 244, 0.1);
+}
+
+.cat-crypto {
+  color: #fbbc04;
+  border: 1px solid rgba(251, 188, 4, 0.4);
+  background: rgba(251, 188, 4, 0.1);
+}
+
+.cat-forensics {
+  color: #34a853;
+  border: 1px solid rgba(52, 168, 83, 0.4);
+  background: rgba(52, 168, 83, 0.1);
+}
+
+.cat-linux {
+  color: #ea4335;
+  border: 1px solid rgba(234, 67, 53, 0.4);
+  background: rgba(234, 67, 53, 0.1);
+}
+
+.cat-stego {
+  color: #ab47bc;
+  border: 1px solid rgba(171, 71, 188, 0.4);
+  background: rgba(171, 71, 188, 0.1);
+}
+
+.cat-osint {
+  color: #00bcd4;
+  border: 1px solid rgba(0, 188, 212, 0.4);
+  background: rgba(0, 188, 212, 0.1);
 }

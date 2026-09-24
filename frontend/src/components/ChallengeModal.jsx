@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useAuth } from '../services/AuthContext';
-import { X, ExternalLink, Terminal, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
+import { X, ExternalLink, Flag, HelpCircle, CheckCircle2, AlertCircle, Terminal, Award, Lock } from 'lucide-react';
 
 const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
   const { refreshUser } = useAuth();
@@ -36,7 +36,7 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
     } catch (err) {
       setFeedback({
         type: 'error',
-        message: err.response?.data?.message || '[-] Incorrect Flag. Verification failed.',
+        message: err.response?.data?.message || '[-] Incorrect Flag. Verify your solution!',
       });
     } finally {
       setSubmitting(false);
@@ -52,122 +52,107 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
   };
 
   const challengeUrl = challenge.serviceUrl || `http://localhost:${challenge.containerPort}`;
-  const challengeCode = `STAGE-${challenge.containerPort || '000'}`;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4 select-none font-mono text-xs">
-      <div className="bg-[#090d14] border border-[#1c2436] w-full max-w-xl overflow-hidden text-slate-300 shadow-none relative">
-        {/* Terminal Header Bar */}
-        <div className="bg-[#0d111a] px-3 py-2 border-b border-[#1c2436] flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-[#d1d5db]">
-            <Terminal className="w-3.5 h-3.5 text-[#10b981]" />
-            <span>CTF TARGET INSPECTOR // {challengeCode}</span>
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 font-mono text-xs select-none">
+      <div className="bg-[#101625] border border-[#1e293b] rounded w-full max-w-2xl overflow-hidden shadow-2xl relative my-8">
+        {/* Google CTF Terminal Header Bar */}
+        <div className="bg-[#080b14] px-4 py-3 border-b border-[#1e293b] flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-[#ea4335] inline-block"></span>
+            <span className="w-3 h-3 rounded-full bg-[#fbbc04] inline-block"></span>
+            <span className="w-3 h-3 rounded-full bg-[#34a853] inline-block"></span>
+            <span className="text-slate-300 font-bold ml-2">GOOGLE CTF TASK // {challenge.title}</span>
           </div>
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-0.5 hover:bg-[#1c2436] transition-colors"
+            className="text-slate-400 hover:text-white p-1 rounded hover:bg-[#1e293b] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Modal Body - Terminal Specification Layout */}
-        <div className="p-4 space-y-4 max-h-[80vh] overflow-y-auto">
-          {/* Key Metadata Block */}
-          <div className="bg-[#05080c] border border-[#1c2436] p-3 space-y-1">
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Challenge ID:</span>
-              <span className="text-[#d1d5db] font-bold">{challengeCode}</span>
+        {/* Task Content */}
+        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+          {/* Header Metadata */}
+          <div className="flex items-start justify-between gap-4 border-b border-[#1e293b] pb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[#4285f4] font-bold uppercase">{challenge.category}</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-300 font-semibold">{challenge.difficulty}</span>
+              </div>
+              <h2 className="text-xl font-bold text-slate-100">{challenge.title}</h2>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Name:</span>
-              <span className="text-slate-200 font-bold">{challenge.title}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Category:</span>
-              <span className="text-[#06b6d4]">{challenge.category}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Difficulty:</span>
-              <span
-                className={
-                  challenge.difficulty === 'Easy'
-                    ? 'badge-easy'
-                    : challenge.difficulty === 'Medium'
-                    ? 'badge-medium'
-                    : 'badge-hard'
-                }
-              >
-                {challenge.difficulty}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Points:</span>
-              <span className="text-amber-400 font-bold">{challenge.points}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500">Status:</span>
-              <span className={challenge.isSolved ? 'text-[#06b6d4] font-bold' : 'text-emerald-400'}>
-                {challenge.isSolved ? '[SOLVED]' : '[OPEN]'}
-              </span>
+
+            <div className="bg-[#080b14] border border-[#1e293b] px-3 py-1.5 rounded text-[#fbbc04] font-bold flex items-center gap-1">
+              <Award className="w-4 h-4" />
+              <span>{challenge.points} PTS</span>
             </div>
           </div>
 
-          {/* Description */}
-          <div>
-            <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">
-              Description:
-            </div>
-            <div className="bg-[#05080c] p-3 border border-[#1c2436] text-slate-300 leading-relaxed whitespace-pre-wrap">
-              {challenge.description}
-            </div>
-          </div>
-
-          {/* Target URL */}
-          <div>
-            <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">
-              Target:
-            </div>
-            <div className="bg-[#05080c] p-2.5 border border-[#1c2436] flex items-center justify-between">
-              <span className="text-[#10b981]">{challengeUrl}</span>
+          {/* Target Host Link */}
+          <div className="bg-[#080b14] border border-[#1e293b] p-3 rounded flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Terminal className="w-4 h-4 text-[#34a853]" />
+              <span className="text-slate-400">Target Host:</span>
               <a
                 href={challengeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="soc-btn-green py-0.5 px-2 text-[10px]"
+                className="text-[#4285f4] hover:underline font-bold"
               >
-                <span>OPEN TARGET</span>
-                <ExternalLink className="w-3 h-3" />
+                {challengeUrl}
               </a>
+            </div>
+
+            <a
+              href={challengeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gctf-btn-blue text-xs py-1 px-3"
+            >
+              <span>ACCESS TARGET</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+          {/* Scenario Description */}
+          <div>
+            <div className="text-[10px] uppercase text-slate-500 font-bold mb-2">
+              TASK BRIEFING:
+            </div>
+            <div className="bg-[#080b14] p-4 rounded border border-[#1e293b] text-slate-300 leading-relaxed font-sans text-xs">
+              {challenge.description}
             </div>
           </div>
 
-          {/* Progressive Hints */}
+          {/* Hints */}
           {challenge.hints && challenge.hints.length > 0 && (
             <div>
-              <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">
-                Hints:
+              <div className="text-[10px] uppercase text-slate-500 font-bold mb-2">
+                TASK HINTS:
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 {challenge.hints.map((hint, idx) => {
                   const isRevealed = revealedHints.includes(idx);
                   return (
-                    <div key={idx} className="bg-[#05080c] border border-[#1c2436]">
+                    <div key={idx} className="bg-[#080b14] border border-[#1e293b] rounded">
                       <button
                         onClick={() => toggleHint(idx)}
-                        className="w-full px-2.5 py-1.5 text-left text-slate-400 hover:text-cyan-400 flex items-center justify-between bg-[#0d111a]"
+                        className="w-full px-3 py-2 text-left text-slate-400 hover:text-white flex items-center justify-between"
                       >
-                        <span className="flex items-center gap-1.5">
-                          <Lock className="w-3 h-3 text-slate-500" />
+                        <span className="flex items-center gap-2">
+                          <Lock className="w-3.5 h-3.5 text-[#fbbc04]" />
                           <span>Hint #{idx + 1}</span>
                         </span>
-                        <span className="text-cyan-400 text-[10px]">
-                          {isRevealed ? '[HIDE]' : '[REVEAL]'}
+                        <span className="text-[#4285f4]">
+                          {isRevealed ? '[ HIDE HINT ]' : '[ REVEAL HINT ]'}
                         </span>
                       </button>
                       {isRevealed && (
-                        <div className="p-2.5 text-cyan-300 border-t border-[#1c2436] bg-[#070b12]">
+                        <div className="p-3 border-t border-[#1e293b] text-[#4285f4] bg-[#0c101c]">
                           {hint.content}
                         </div>
                       )}
@@ -178,45 +163,45 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
             </div>
           )}
 
-          {/* Audit Banner */}
+          {/* Feedback */}
           {feedback && (
             <div
-              className={`p-2.5 border flex items-center gap-2 ${
+              className={`p-3 rounded border flex items-center gap-2 font-bold ${
                 feedback.type === 'success'
-                  ? 'bg-emerald-950/30 border-[#10b981] text-[#10b981]'
-                  : 'bg-red-950/30 border-red-500 text-red-400'
+                  ? 'bg-[#34a853]/10 border-[#34a853] text-[#34a853]'
+                  : 'bg-[#ea4335]/10 border-[#ea4335] text-[#ea4335]'
               }`}
             >
               {feedback.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 text-[#10b981] flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#34a853]" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[#ea4335]" />
               )}
               <span>{feedback.message}</span>
             </div>
           )}
 
-          {/* Submit Flag Terminal Form */}
-          <form onSubmit={handleSubmitFlag} className="space-y-1.5 pt-1">
+          {/* Flag Submission Form */}
+          <form onSubmit={handleSubmitFlag} className="space-y-2 pt-2">
             <label className="block text-[10px] uppercase text-slate-400 font-bold">
-              Submit Flag:
+              $ ./submit_flag --flag=
             </label>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={flagInput}
                 onChange={(e) => setFlagInput(e.target.value)}
-                placeholder="flag{...}"
+                placeholder="CTF{...} or flag{...}"
                 disabled={challenge.isSolved || submitting}
-                className="flex-1 px-3 py-1.5 bg-[#05080c] border border-[#1c2436] text-slate-100 placeholder-slate-700 focus:outline-none focus:border-[#10b981]"
+                className="flex-1 px-3 py-2 bg-[#080b14] border border-[#1e293b] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#4285f4]"
               />
 
               <button
                 type="submit"
                 disabled={submitting || challenge.isSolved || !flagInput.trim()}
-                className="soc-btn-green py-1.5 px-4 uppercase font-bold disabled:opacity-50"
+                className="gctf-btn-green py-2 px-5 font-bold disabled:opacity-50"
               >
-                {submitting ? 'VALIDATING...' : challenge.isSolved ? 'SOLVED' : 'SUBMIT'}
+                {submitting ? 'VALIDATING...' : challenge.isSolved ? 'SOLVED' : 'SUBMIT FLAG'}
               </button>
             </div>
           </form>

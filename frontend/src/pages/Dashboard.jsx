@@ -1,39 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import api from '../services/api';
 import { useAuth } from '../services/AuthContext';
+import ChallengeCard from '../components/ChallengeCard';
 import ChallengeModal from '../components/ChallengeModal';
-import { Terminal, CheckCircle2, Award, Trophy, Shield, RefreshCw, ExternalLink } from 'lucide-react';
+import { Flag, Trophy, CheckCircle2, RefreshCw, Search, Award } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [challenges, setChallenges] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedChallenge, setSelectedChallenge] = useState(null);
 
-  const fetchData = async () => {
+  // Filters
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('All');
+
+  const fetchChallenges = async () => {
     setLoading(true);
     try {
-      const [chRes, lbRes] = await Promise.all([
-        api.get('/challenges'),
-        api.get('/leaderboard'),
-      ]);
-
-      if (chRes.data.success) {
-        setChallenges(chRes.data.data);
-      }
-      if (lbRes.data.success) {
-        setLeaderboard(lbRes.data.data);
+      const res = await api.get('/challenges');
+      if (res.data.success) {
+        setChallenges(res.data.data);
       }
     } catch (err) {
-      console.error('Failed to load lab data:', err);
+      console.error('Failed to load challenges:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchChallenges();
   }, []);
 
   const handleSubmissionSuccess = (solvedId) => {
@@ -45,155 +43,138 @@ const Dashboard = () => {
     }
   };
 
+  const categories = useMemo(() => {
+    const set = new Set(challenges.map((c) => c.category));
+    return ['All', ...Array.from(set)];
+  }, [challenges]);
+
+  const filteredChallenges = useMemo(() => {
+    return challenges.filter((ch) => {
+      const matchesSearch =
+        ch.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ch.category.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory === 'All' || ch.category === selectedCategory;
+      const matchesDifficulty = selectedDifficulty === 'All' || ch.difficulty === selectedDifficulty;
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    });
+  }, [challenges, searchQuery, selectedCategory, selectedDifficulty]);
+
   const solvedCount = challenges.filter((c) => c.isSolved).length;
-  const userRankObj = leaderboard.find((item) => item.id === user?._id);
-  const userRank = userRankObj ? `#${userRankObj.rank}` : '#-';
 
   return (
-    <div className="space-y-4">
-      {/* Top 4 Stats Panels Table Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {/* Panel 1 */}
-        <div className="soc-panel p-3">
-          <div className="text-[10px] uppercase text-slate-500 font-bold mb-1 flex items-center justify-between">
-            <span>COMPLETED CHALLENGES</span>
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981]" />
-          </div>
-          <div className="text-xl font-bold text-[#10b981]">
-            {solvedCount} / {challenges.length}
-          </div>
-        </div>
+    <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+      {/* Google CTF Retro ASCII Header Banner */}
+      <div className="gctf-card p-6 bg-[#080b14] border-[#1e293b] font-mono select-none">
+        <pre className="text-[10px] md:text-xs text-[#4285f4] font-bold overflow-x-auto leading-none mb-4 hidden sm:block">
+{`   ___  ___   ___  ___  _    ___   ___ _____ ___ 
+  / __|/ _ \ / _ \/ __|| |  | __| / __|_   _| __|
+ | (_ | (_) | (_) \__ \| |__| _| | (__  | | | _| 
+  \___|\___/ \___/|___/|____|___| \___| |_| |_|  `}
+        </pre>
 
-        {/* Panel 2 */}
-        <div className="soc-panel p-3">
-          <div className="text-[10px] uppercase text-slate-500 font-bold mb-1 flex items-center justify-between">
-            <span>AVAILABLE CHALLENGES</span>
-            <Shield className="w-3.5 h-3.5 text-[#06b6d4]" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-[#1e293b] pt-4">
+          <div>
+            <h1 className="text-xl font-pixel text-slate-100">
+              <span className="text-[#4285f4]">G</span>
+              <span className="text-[#ea4335]">o</span>
+              <span className="text-[#fbbc04]">o</span>
+              <span className="text-[#4285f4]">g</span>
+              <span className="text-[#34a853]">l</span>
+              <span className="text-[#ea4335]">e</span> CTF // LAB ARENA
+            </h1>
+            <p className="text-xs text-slate-400 mt-1 font-mono">
+              Welcome contestant <strong className="text-slate-100">{user?.username}</strong>. Solve vulnerability tasks, capture flags, and climb the scoreboard.
+            </p>
           </div>
-          <div className="text-xl font-bold text-slate-200">
-            {challenges.length - solvedCount}
-          </div>
-        </div>
 
-        {/* Panel 3 */}
-        <div className="soc-panel p-3">
-          <div className="text-[10px] uppercase text-slate-500 font-bold mb-1 flex items-center justify-between">
-            <span>TOTAL POINTS</span>
-            <Award className="w-3.5 h-3.5 text-amber-400" />
-          </div>
-          <div className="text-xl font-bold text-amber-400">
-            {user?.score || 0} PTS
-          </div>
-        </div>
+          {/* Quick Score Chips */}
+          <div className="flex items-center gap-3 font-mono">
+            <div className="bg-[#101625] border border-[#1e293b] px-4 py-2 rounded text-center">
+              <span className="block text-[10px] text-slate-500 uppercase">SCORE</span>
+              <span className="text-base font-bold text-[#fbbc04]">{user?.score || 0} PTS</span>
+            </div>
 
-        {/* Panel 4 */}
-        <div className="soc-panel p-3">
-          <div className="text-[10px] uppercase text-slate-500 font-bold mb-1 flex items-center justify-between">
-            <span>RANK POSITION</span>
-            <Trophy className="w-3.5 h-3.5 text-purple-400" />
-          </div>
-          <div className="text-xl font-bold text-purple-400">
-            {userRank}
+            <div className="bg-[#101625] border border-[#1e293b] px-4 py-2 rounded text-center">
+              <span className="block text-[10px] text-slate-500 uppercase">SOLVED</span>
+              <span className="text-base font-bold text-[#34a853]">
+                {solvedCount}/{challenges.length}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Target Directory Table Panel */}
-      <div className="soc-panel">
-        <div className="soc-panel-header">
-          <span className="flex items-center gap-1.5">
-            <Terminal className="w-3.5 h-3.5 text-[#10b981]" />
-            ACTIVE CTF TARGET STAGES
-          </span>
-          <button
-            onClick={fetchData}
-            className="soc-btn-secondary py-0.5 px-2 text-[10px]"
+      {/* Domain Category Filter Tabs (Google CTF Style) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-mono text-xs">
+        {categories.map((cat) => {
+          const isSelected = selectedCategory === cat;
+          return (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 rounded whitespace-nowrap transition-all font-semibold ${
+                isSelected
+                  ? 'bg-[#4285f4] text-white'
+                  : 'bg-[#101625] text-slate-400 hover:text-white border border-[#1e293b]'
+              }`}
+            >
+              [ {cat === 'All' ? 'ALL TASKS' : cat.toUpperCase()} ]
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Toolbar */}
+      <div className="gctf-card p-3 flex flex-col md:flex-row items-center justify-between gap-3 font-mono text-xs">
+        <div className="relative w-full md:w-80">
+          <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search task title..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-3 py-1.5 bg-[#080b14] border border-[#1e293b] rounded text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#4285f4]"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <select
+            value={selectedDifficulty}
+            onChange={(e) => setSelectedDifficulty(e.target.value)}
+            className="bg-[#080b14] border border-[#1e293b] text-slate-300 py-1.5 px-3 rounded focus:outline-none focus:border-[#4285f4]"
           >
-            <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin text-[#10b981]' : ''}`} />
+            <option value="All">Difficulty: All</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+
+          <button onClick={fetchChallenges} className="gctf-btn-secondary">
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4285f4]' : ''}`} />
             <span>REFRESH</span>
           </button>
         </div>
-
-        {loading ? (
-          <div className="p-8 text-center text-slate-500 font-mono text-xs">
-            Querying lab targets...
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="soc-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Difficulty</th>
-                  <th>Points</th>
-                  <th>Status</th>
-                  <th className="text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {challenges.map((ch, idx) => {
-                  const chCode = `STAGE-300${idx + 1}`;
-                  return (
-                    <tr key={ch._id}>
-                      <td className="font-bold text-[#d1d5db]">{chCode}</td>
-                      <td className="font-bold text-slate-200">{ch.title}</td>
-                      <td>
-                        <span className="text-[#06b6d4]">{ch.category}</span>
-                      </td>
-                      <td>
-                        <span
-                          className={
-                            ch.difficulty === 'Easy'
-                              ? 'badge-easy'
-                              : ch.difficulty === 'Medium'
-                              ? 'badge-medium'
-                              : 'badge-hard'
-                          }
-                        >
-                          {ch.difficulty}
-                        </span>
-                      </td>
-                      <td className="text-amber-400 font-bold">{ch.points}</td>
-                      <td>
-                        {ch.isSolved ? (
-                          <span className="text-[#06b6d4] font-bold">[SOLVED]</span>
-                        ) : (
-                          <span className="text-[#10b981] font-bold">[OPEN]</span>
-                        )}
-                      </td>
-                      <td className="text-right">
-                        <button
-                          onClick={() => setSelectedChallenge(ch)}
-                          className="soc-btn-green py-0.5 px-2 text-[10px]"
-                        >
-                          <span>{ch.isSolved ? 'VIEW' : 'INSPECT'}</span>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
 
-      {/* System Audit Specifications Panel */}
-      <div className="soc-panel p-3 space-y-2">
-        <div className="text-[11px] font-bold text-[#d1d5db] border-b border-[#1c2436] pb-1.5 flex items-center justify-between">
-          <span>RANGE INFRASTRUCTURE SPECIFICATIONS</span>
-          <span className="text-[#10b981]">[ISOLATED DOCKER ENVIRONMENT]</span>
+      {/* Challenge Cards Grid */}
+      {loading ? (
+        <div className="py-16 text-center font-mono text-xs text-slate-500">
+          <RefreshCw className="w-6 h-6 text-[#4285f4] animate-spin mx-auto mb-2" />
+          <span>Fetching Google CTF tasks...</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[10px] text-slate-400">
-          <div>• Host System: macOS Sandbox Isolation</div>
-          <div>• Database: MongoDB 7.0 Engine</div>
-          <div>• Target Containers: 6 Active Bridge Networks</div>
+      ) : filteredChallenges.length === 0 ? (
+        <div className="gctf-card p-12 text-center font-mono text-xs text-slate-500">
+          No Google CTF tasks match your query filters.
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredChallenges.map((ch) => (
+            <ChallengeCard key={ch._id} challenge={ch} onOpenModal={(c) => setSelectedChallenge(c)} />
+          ))}
+        </div>
+      )}
 
-      {/* Challenge Inspector Modal */}
+      {/* Task Dialog */}
       {selectedChallenge && (
         <ChallengeModal
           challenge={selectedChallenge}

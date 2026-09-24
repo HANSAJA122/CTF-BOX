@@ -1,58 +1,41 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './services/AuthContext';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
-import Challenges from './pages/Challenges';
 import Leaderboard from './pages/Leaderboard';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
 
-// Helper component to resolve current page title for the Header bar
-const GetPageTitle = () => {
-  const location = useLocation();
-  switch (location.pathname) {
-    case '/':
-      return 'LAB DASHBOARD';
-    case '/challenges':
-      return 'TARGET MATRIX';
-    case '/leaderboard':
-      return 'GLOBAL STANDINGS';
-    case '/profile':
-      return 'MY PROFILE & AUDIT LOGS';
-    case '/admin':
-      return 'ADMINISTRATIVE CONTROLS';
-    default:
-      return 'LAB ARENA';
-  }
-};
-
-// Layout wrapper for authenticated contestant session
+// Google CTF Main Layout Wrapper
 const AppLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen bg-[#0b0e14] text-slate-300 font-sans">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
-        <Header pageTitle={<GetPageTitle />} />
-        <main className="p-6 md:p-8 flex-1">
-          {children}
-        </main>
-      </div>
+    <div className="min-h-screen bg-[#0c101c] text-slate-300 font-mono flex flex-col">
+      <Navbar />
+      <main className="flex-1 pb-12">
+        {children}
+      </main>
+      {/* Footer */}
+      <footer className="border-t border-[#1e293b] bg-[#080b14] py-4 text-center text-xs text-slate-500 font-mono">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-2">
+          <span>Google CTF Style // SLIIT Security Labs &copy; 2026</span>
+          <span className="text-[#34a853]">Isolated Docker Challenge Network</span>
+        </div>
+      </footer>
     </div>
   );
 };
 
-// Protected Route Guard for logged-in users
+// Protected Route Guard for logged-in contestants
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center text-[#10b981] font-mono text-xs">
-        Initializing Security Lab Authenticator...
+      <div className="min-h-screen bg-[#0c101c] flex items-center justify-center text-[#4285f4] font-mono text-xs">
+        Connecting to Google CTF Authenticator...
       </div>
     );
   }
@@ -66,7 +49,7 @@ const AdminRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center text-purple-400 font-mono text-xs">
+      <div className="min-h-screen bg-[#0c101c] flex items-center justify-center text-[#ab47bc] font-mono text-xs">
         Verifying Administrative Credentials...
       </div>
     );
@@ -85,14 +68,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/challenges"
-            element={
-              <ProtectedRoute>
-                <Challenges />
               </ProtectedRoute>
             }
           />
