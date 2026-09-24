@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Forensics - Incident Response Log Analysis</title>
+  <style>
+    body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 40px; text-align: center; }
+    .card { background: #1e293b; padding: 35px; border-radius: 12px; max-width: 650px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    h1 { color: #ef4444; }
+    p { color: #94a3b8; line-height: 1.6; }
+    .btn { display: inline-block; background: #ef4444; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 15px; }
+    .btn:hover { background: #f87171; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Digital Forensics Incident Response</h1>
+    <p>A web application was compromised by an external threat actor. SOC analysts captured the HTTP access log during the exfiltration window.</p>
+    <p>Download the raw log file below, inspect the HTTP GET parameters, and decode the exfiltrated Base64 string payload to reveal the flag.</p>
+    <a href="/access.log" download class="btn">Download access.log Artifact</a>
+  </div>
+</body>
+</html>

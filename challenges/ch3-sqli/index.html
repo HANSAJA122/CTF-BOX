@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CyberVault Admin Portal - SQL Injection Challenge</title>
+  <style>
+    body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 40px; display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+    .card { background: #1e293b; padding: 35px; border-radius: 12px; width: 100%; max-width: 440px; box-shadow: 0 4px 25px rgba(0,0,0,0.5); }
+    h2 { color: #fbbf24; text-align: center; margin-bottom: 8px; }
+    p.sub { color: #94a3b8; font-size: 13px; text-align: center; margin-bottom: 24px; }
+    label { display: block; font-size: 12px; font-family: monospace; color: #cbd5e1; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px; margin-bottom: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; box-sizing: border-box; }
+    button { width: 100%; padding: 12px; background: #f59e0b; color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    button:hover { background: #fbbf24; }
+    #result { margin-top: 20px; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 13px; display: none; }
+    .success { background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #34d399; }
+    .error { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Secure Vault Portal</h2>
+    <p class="sub">Bypass SQL authentication to reveal secret flag</p>
+    <form id="loginForm">
+      <div>
+        <label>USERNAME</label>
+        <input type="text" id="username" placeholder="admin" required />
+      </div>
+      <div>
+        <label>PASSWORD</label>
+        <input type="password" id="password" placeholder="••••••••" required />
+      </div>
+      <button type="submit">Authenticate</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const resDiv = document.getElementById('result');
+      resDiv.style.display = 'none';
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        resDiv.style.display = 'block';
+        if (data.success) {
+          resDiv.className = 'success';
+          resDiv.innerHTML = `<strong>${data.message}</strong><br/><br/>FLAG: <code>${data.flag}</code>`;
+        } else {
+          resDiv.className = 'error';
+          resDiv.innerHTML = `<strong>${data.message}</strong>`;
+        }
+      } catch (err) {
+        resDiv.style.display = 'block';
+        resDiv.className = 'error';
+        resDiv.innerHTML = `Error connecting to authentication endpoint.`;
+      }
+    });
+  </script>
+</body>
+</html>

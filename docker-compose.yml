@@ -1,0 +1,120 @@
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: cybervault-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - cybervault-net
+
+  # Express Backend REST API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cybervault-backend
+    restart: always
+    ports:
+      - "5001:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/cybervault_ctf
+      - JWT_SECRET=super_secret_cybervault_jwt_key_2026_ie3132
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    networks:
+      - cybervault-net
+
+  # React Frontend Dashboard UI
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cybervault-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5001/api
+    depends_on:
+      - backend
+    networks:
+      - cybervault-net
+
+  # Challenge 1: OSINT Reconnaissance (Port 3001)
+  ch1-osint:
+    build:
+      context: ./challenges/ch1-osint
+      dockerfile: Dockerfile
+    container_name: cybervault-ch1-osint
+    ports:
+      - "3001:3001"
+    networks:
+      - cybervault-net
+
+  # Challenge 2: Steganography (Port 3002)
+  ch2-stego:
+    build:
+      context: ./challenges/ch2-stego
+      dockerfile: Dockerfile
+    container_name: cybervault-ch2-stego
+    ports:
+      - "3002:3002"
+    networks:
+      - cybervault-net
+
+  # Challenge 3: Web Security SQL Injection (Port 3003)
+  ch3-sqli:
+    build:
+      context: ./challenges/ch3-sqli
+      dockerfile: Dockerfile
+    container_name: cybervault-ch3-sqli
+    ports:
+      - "3003:3003"
+    networks:
+      - cybervault-net
+
+  # Challenge 4: Cryptography Caesar Cipher (Port 3004)
+  ch4-crypto:
+    build:
+      context: ./challenges/ch4-crypto
+      dockerfile: Dockerfile
+    container_name: cybervault-ch4-crypto
+    ports:
+      - "3004:3004"
+    networks:
+      - cybervault-net
+
+  # Challenge 5: Digital Forensics Log Analysis (Port 3005)
+  ch5-forensics:
+    build:
+      context: ./challenges/ch5-forensics
+      dockerfile: Dockerfile
+    container_name: cybervault-ch5-forensics
+    ports:
+      - "3005:3005"
+    networks:
+      - cybervault-net
+
+  # Challenge 6: Linux Privilege Escalation (Port 3006)
+  ch6-privesc:
+    build:
+      context: ./challenges/ch6-privesc
+      dockerfile: Dockerfile
+    container_name: cybervault-ch6-privesc
+    ports:
+      - "3006:3006"
+    networks:
+      - cybervault-net
+
+networks:
+  cybervault-net:
+    driver: bridge
+
+volumes:
+  mongo_data:

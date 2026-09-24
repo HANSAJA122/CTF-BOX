@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Linux Privilege Escalation - Web Shell Terminal</title>
+  <style>
+    body { font-family: 'Fira Code', monospace; background: #090d16; color: #10b981; padding: 20px; margin: 0; }
+    .terminal { background: #000; border: 1px solid #1e293b; border-radius: 8px; max-width: 850px; margin: 20px auto; padding: 20px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.2); }
+    .header { color: #64748b; font-size: 12px; margin-bottom: 15px; border-b: 1px solid #1e293b; padding-bottom: 10px; }
+    .output-area { min-height: 300px; max-height: 450px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 13px; line-height: 1.5; color: #e2e8f0; }
+    .input-line { display: flex; align-items: center; margin-top: 15px; }
+    .prompt { color: #10b981; font-weight: bold; margin-right: 10px; white-space: nowrap; }
+    input { flex: 1; background: transparent; border: none; color: #34d399; font-family: inherit; font-size: 14px; outline: none; }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="header">
+      CyberVault Shell v2.4 (Linux 5.15.0-x86_64) - Type 'help', 'whoami', 'ls', or 'find / -perm -4000 2>/dev/null'
+    </div>
+    <div id="output" class="output-area">Welcome to Linux PrivEsc Challenge. You are logged in as 'user'.\nObjective: Locate misconfigured SUID binaries to elevate to ROOT and obtain /root/flag.txt.\n\nType 'notes.txt' or 'cat notes.txt' to begin.\n</div>
+    <div class="input-line">
+      <span class="prompt">user@cybervault-box:~$</span>
+      <input type="text" id="cmdInput" placeholder="type Linux command..." autofocus />
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('cmdInput');
+    const output = document.getElementById('output');
+
+    input.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        const command = input.value.trim();
+        if (!command) return;
+
+        output.innerHTML += `<div style="color: #38bdf8;">user@cybervault-box:~$ ${command}</div>`;
+        input.value = '';
+
+        if (command === 'clear') {
+          output.innerHTML = '';
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/terminal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command })
+          });
+          const data = await res.json();
+          output.innerHTML += `<div style="color: #cbd5e1; margin-bottom: 12px;">${data.output}</div>`;
+        } catch (err) {
+          output.innerHTML += `<div style="color: #ef4444;">Error communicating with shell target container.</div>`;
+        }
+        output.scrollTop = output.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>
