@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 * {
   box-sizing: border-box;
@@ -7,110 +7,162 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0b0f19;
-  color: #e2e8f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #0b0e14;
+  color: #94a3b8;
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
 }
 
 code, pre, .font-mono {
-  font-family: 'Fira Code', monospace;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-/* Scrollbar customization */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #0b0e14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+  background: #1f293d;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #2d3b55;
 }
 
-/* Cyber card glassmorphism effect */
-.cyber-card {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.2s ease-in-out;
+/* Sharp HTB / TryHackMe Card Styling */
+.htb-card {
+  background-color: #121824;
+  border: 1px solid #1f293d;
+  border-radius: 6px;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.cyber-card:hover {
-  border-color: rgba(16, 185, 129, 0.5);
-  box-shadow: 0 12px 32px -4px rgba(16, 185, 129, 0.15);
+.htb-card:hover {
+  border-color: #2d3b55;
 }
 
-.cyber-button-primary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 8px;
+.htb-card-active {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Primary HTB Green Action Button */
+.htb-btn-primary {
+  background-color: #10b981;
+  color: #0b0e14;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  border-radius: 4px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.cyber-button-primary:hover {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+.htb-btn-primary:hover {
+  background-color: #34d399;
 }
 
-.cyber-button-secondary {
-  background: #1e293b;
+.htb-btn-secondary {
+  background-color: #1a2332;
   color: #cbd5e1;
-  font-weight: 500;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 1px solid #334155;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #2d3b55;
   cursor: pointer;
-  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.cyber-button-secondary:hover {
-  background: #334155;
+.htb-btn-secondary:hover {
+  background-color: #232d42;
   color: #ffffff;
+  border-color: #3b4c6b;
 }
 
+/* Difficulty Badges */
 .badge-easy {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
   border: 1px solid rgba(16, 185, 129, 0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .badge-medium {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
   border: 1px solid rgba(245, 158, 11, 0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .badge-hard {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .badge-solved {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background-color: rgba(6, 182, 212, 0.1);
+  color: #06b6d4;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Category Domain Pill */
+.domain-pill {
+  background-color: #1a2332;
+  color: #94a3b8;
+  border: 1px solid #2d3b55;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* Status Indicators */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-online {
+  background-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.status-offline {
+  background-color: #ef4444;
 }

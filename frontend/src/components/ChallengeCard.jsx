@@ -1,8 +1,8 @@
 import React from 'react';
-import { CheckCircle2, Terminal, Flag, Award, HelpCircle } from 'lucide-react';
+import { CheckCircle2, Terminal, Award, HelpCircle, ArrowRight } from 'lucide-react';
 
 const ChallengeCard = ({ challenge, onOpenModal }) => {
-  const { title, category, difficulty, points, isSolved, containerPort } = challenge;
+  const { title, category, difficulty, points, isSolved, containerPort, hints } = challenge;
 
   const getDifficultyBadge = (diff) => {
     switch (diff) {
@@ -19,50 +19,46 @@ const ChallengeCard = ({ challenge, onOpenModal }) => {
 
   return (
     <div
-      className={`cyber-card p-6 flex flex-col justify-between relative overflow-hidden group ${
-        isSolved ? 'border-emerald-500/40 bg-emerald-950/10' : ''
+      className={`htb-card p-5 flex flex-col justify-between relative group ${
+        isSolved ? 'htb-card-active' : ''
       }`}
     >
-      {/* Solved overlay indicator */}
-      {isSolved && (
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 badge-solved px-2.5 py-1 rounded-full text-xs font-semibold">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Completed</span>
-        </div>
-      )}
-
       <div>
-        {/* Category & Difficulty badges */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-mono text-slate-400 uppercase tracking-wider bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700/60">
-            {category}
-          </span>
-          <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${getDifficultyBadge(difficulty)}`}>
-            {difficulty}
-          </span>
+        {/* Top Badges Row */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <span className="domain-pill truncate max-w-[150px]">{category}</span>
+          <div className="flex items-center gap-1.5">
+            <span className={getDifficultyBadge(difficulty)}>{difficulty}</span>
+            {isSolved && (
+              <span className="badge-solved flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-[#06b6d4]" />
+                SOLVED
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-slate-100 group-hover:text-emerald-400 transition-colors mb-2">
+        <h3 className="text-base font-mono font-bold text-slate-100 group-hover:text-[#10b981] transition-colors mb-2 line-clamp-1">
           {title}
         </h3>
 
-        {/* Info row */}
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-400 mb-6 mt-4">
-          <div className="flex items-center gap-1.5">
-            <Award className="w-4 h-4 text-amber-400" />
-            <span className="text-amber-300 font-semibold">{points} Pts</span>
+        {/* Meta Stats Row */}
+        <div className="flex items-center gap-4 text-xs font-mono text-slate-400 my-4 py-2 px-3 bg-[#0b0e14] border border-[#1f293d] rounded">
+          <div className="flex items-center gap-1 text-amber-400 font-bold">
+            <Award className="w-3.5 h-3.5" />
+            <span>{points} PTS</span>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <Terminal className="w-4 h-4 text-emerald-400" />
-            <span>Port: <strong className="text-slate-200">{containerPort}</strong></span>
+          <div className="flex items-center gap-1 text-slate-400">
+            <Terminal className="w-3.5 h-3.5 text-[#10b981]" />
+            <span>PORT: <strong className="text-slate-200">{containerPort}</strong></span>
           </div>
 
-          {challenge.hints && challenge.hints.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <HelpCircle className="w-4 h-4 text-cyan-400" />
-              <span>{challenge.hints.length} Hints</span>
+          {hints && hints.length > 0 && (
+            <div className="flex items-center gap-1 text-cyan-400 ml-auto">
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>{hints.length} HINTS</span>
             </div>
           )}
         </div>
@@ -71,14 +67,14 @@ const ChallengeCard = ({ challenge, onOpenModal }) => {
       {/* Footer Action Button */}
       <button
         onClick={() => onOpenModal(challenge)}
-        className={`w-full py-2.5 px-4 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+        className={`w-full py-2 px-3 rounded text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 ${
           isSolved
-            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
-            : 'cyber-button-primary'
+            ? 'bg-[#1a2332] text-[#06b6d4] border border-[#06b6d4]/40 hover:bg-[#06b6d4]/10'
+            : 'htb-btn-primary'
         }`}
       >
-        <Flag className="w-4 h-4" />
-        <span>{isSolved ? 'View Solved Stage' : 'Launch Challenge'}</span>
+        <span>{isSolved ? 'REVIEW SOLVED TARGET' : 'SPAWN TARGET'}</span>
+        <ArrowRight className="w-3.5 h-3.5" />
       </button>
     </div>
   );

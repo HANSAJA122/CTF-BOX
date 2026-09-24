@@ -33,7 +33,7 @@ const Admin = () => {
       });
 
       if (res.data.success) {
-        setMessage({ type: 'success', text: 'New CTF Challenge created successfully!' });
+        setMessage({ type: 'success', text: 'CTF Challenge published to lab matrix successfully!' });
         setFormData({
           title: '',
           category: 'Web Security',
@@ -50,7 +50,7 @@ const Admin = () => {
     } catch (err) {
       setMessage({
         type: 'error',
-        text: err.response?.data?.message || 'Failed to create challenge',
+        text: err.response?.data?.message || 'Failed to publish challenge',
       });
     } finally {
       setLoading(false);
@@ -58,58 +58,56 @@ const Admin = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-8">
-      <div>
-        <div className="flex items-center gap-2 text-purple-400 text-xs font-mono font-semibold uppercase tracking-wider mb-1">
+    <div className="space-y-6">
+      <div className="border-b border-[#1f293d] pb-4">
+        <div className="flex items-center gap-2 text-purple-400 text-xs font-mono font-semibold uppercase mb-1">
           <Shield className="w-4 h-4" />
-          <span>Platform Administration</span>
+          <span>Admin Controls</span>
         </div>
-        <h1 className="text-3xl font-extrabold text-white">Create CTF Challenge</h1>
-        <p className="text-slate-400 text-sm mt-1">
-          Add new cybersecurity stages, assign Docker target ports, define flags, and publish to students.
+        <h1 className="text-2xl font-mono font-bold text-slate-100">Publish CTF Target Box</h1>
+        <p className="text-xs font-mono text-slate-400 mt-1">
+          Define new target stages, container ports, solution flags, and hint disclosures.
         </p>
       </div>
 
-      <div className="cyber-card p-8 shadow-2xl">
+      <div className="htb-card p-6 shadow-2xl">
         {message && (
           <div
-            className={`mb-6 p-4 rounded-lg border flex items-center gap-3 text-sm font-medium ${
+            className={`mb-5 p-3 rounded border text-xs font-mono flex items-center gap-2 ${
               message.type === 'success'
-                ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                : 'bg-red-950/40 border-red-500/40 text-red-300'
+                ? 'bg-emerald-950/40 border-[#10b981]/50 text-[#10b981]'
+                : 'bg-red-950/40 border-red-500/50 text-red-400'
             }`}
           >
             {message.type === 'success' ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-red-400" />
             )}
             <span>{message.text}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-5 text-xs font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-mono text-slate-400 uppercase mb-2">
-                Challenge Title
-              </label>
+              <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ target_title</label>
               <input
                 type="text"
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g. Advanced XSS Exploitation"
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                placeholder="e.g. Advanced Command Injection"
+                className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-slate-400 uppercase mb-2">Category</label>
+              <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ domain_category</label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-purple-500 font-mono"
+                className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 focus:outline-none focus:border-purple-500"
               >
                 <option value="OSINT Reconnaissance">OSINT Reconnaissance</option>
                 <option value="Steganography">Steganography</option>
@@ -121,11 +119,11 @@ const Admin = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-slate-400 uppercase mb-2">Difficulty</label>
+              <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ difficulty</label>
               <select
                 value={formData.difficulty}
                 onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-purple-500 font-mono"
+                className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 focus:outline-none focus:border-purple-500"
               >
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
@@ -134,76 +132,70 @@ const Admin = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-slate-400 uppercase mb-2">Points</label>
+              <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ points_value</label>
               <input
                 type="number"
                 required
                 value={formData.points}
                 onChange={(e) => setFormData({ ...formData, points: parseInt(e.target.value) || 0 })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-purple-500 font-mono"
+                className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 focus:outline-none focus:border-purple-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-slate-400 uppercase mb-2">
-                Docker Container Port
-              </label>
+              <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ docker_port</label>
               <input
                 type="number"
                 required
                 value={formData.containerPort}
                 onChange={(e) => setFormData({ ...formData, containerPort: parseInt(e.target.value) || 3000 })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-purple-500 font-mono"
+                className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 focus:outline-none focus:border-purple-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-slate-400 uppercase mb-2">
-                Secret Flag
-              </label>
+              <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ secret_flag</label>
               <input
                 type="text"
                 required
                 value={formData.flag}
                 onChange={(e) => setFormData({ ...formData, flag: e.target.value })}
-                placeholder="flag{secret_string}"
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-emerald-400 font-mono placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                placeholder="flag{...}"
+                className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-[#10b981] placeholder-slate-600 focus:outline-none focus:border-purple-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 uppercase mb-2">
-              Scenario / Problem Description
-            </label>
+            <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ scenario_description</label>
             <textarea
               rows={4}
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Describe the challenge background scenario, learning objectives, and player tasks..."
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500"
+              placeholder="Describe problem scenario, learning objectives, and player tasks..."
+              className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 uppercase mb-2">Optional Hint #1</label>
+            <label className="block text-slate-400 uppercase font-semibold mb-1.5">$ hint_disclosure_1</label>
             <input
               type="text"
               value={formData.hint1}
               onChange={(e) => setFormData({ ...formData, hint1: e.target.value })}
-              placeholder="e.g. Check for hidden comments in the page source."
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500"
+              placeholder="e.g. Inspect the page HTTP headers."
+              className="w-full px-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2 text-sm"
+            className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded transition-all flex items-center justify-center gap-2"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>{loading ? 'Publishing Stage...' : 'Publish Challenge'}</span>
+            <span>{loading ? 'PUBLISHING TARGET...' : 'PUBLISH TARGET STAGE'}</span>
           </button>
         </form>
       </div>

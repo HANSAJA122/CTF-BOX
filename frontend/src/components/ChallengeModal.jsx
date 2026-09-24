@@ -11,6 +11,7 @@ import {
   Activity,
   Terminal,
   Award,
+  Lock,
 } from 'lucide-react';
 
 const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
@@ -72,7 +73,7 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
     } catch (err) {
       setFeedback({
         type: 'error',
-        message: err.response?.data?.message || 'Incorrect flag. Check your solving path and try again!',
+        message: err.response?.data?.message || '[-] Incorrect Flag. Verify your exploit methodology!',
       });
     } finally {
       setSubmitting(false);
@@ -90,112 +91,130 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
   const challengeUrl = challenge.serviceUrl || `http://localhost:${challenge.containerPort}`;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl relative my-8">
-        {/* Header */}
-        <div className="bg-slate-950/80 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs px-2.5 py-1 rounded-md">
-              {challenge.category}
-            </span>
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 overflow-y-auto select-none">
+      <div className="bg-[#121824] border border-[#1f293d] rounded-md w-full max-w-2xl overflow-hidden shadow-2xl relative my-8">
+        {/* Modal Header */}
+        <div className="bg-[#0d1117] px-5 py-3.5 border-b border-[#1f293d] flex items-center justify-between">
+          <div className="flex items-center gap-2 font-mono text-xs">
+            <span className="domain-pill">{challenge.category}</span>
             <span
-              className={`text-xs font-semibold px-2.5 py-1 rounded-md ${
+              className={
                 challenge.difficulty === 'Easy'
                   ? 'badge-easy'
                   : challenge.difficulty === 'Medium'
                   ? 'badge-medium'
                   : 'badge-hard'
-              }`}
+              }
             >
               {challenge.difficulty}
             </span>
+            {challenge.isSolved && (
+              <span className="badge-solved flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-[#06b6d4]" />
+                SOLVED
+              </span>
+            )}
           </div>
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-white p-1 rounded hover:bg-[#1a2332] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Body */}
+        {/* Modal Body */}
         <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-          {/* Title & Status */}
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white mb-2">{challenge.title}</h2>
-              <div className="flex items-center gap-1.5 text-xs font-mono">
-                <Award className="w-4 h-4 text-amber-400" />
-                <span className="text-amber-300 font-bold text-sm">{challenge.points} Points</span>
-              </div>
+          {/* Title & Points Bar */}
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-mono font-bold text-slate-100">{challenge.title}</h2>
+              <p className="text-xs font-mono text-slate-500 mt-1">
+                Target Port: <span className="text-[#10b981] font-semibold">{challenge.containerPort}</span>
+              </p>
             </div>
 
-            {/* Container Service Bar */}
-            <div className="mt-3 p-3.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm font-mono">
-                <Terminal className="w-4 h-4 text-emerald-400" />
-                <span className="text-slate-400">Target Container:</span>
-                <span className="text-emerald-300 font-semibold">{challengeUrl}</span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                {containerStatus.loading ? (
-                  <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                    <Activity className="w-3.5 h-3.5 animate-spin text-emerald-400" />
-                    Checking...
-                  </span>
-                ) : (
-                  <a
-                    href={challengeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cyber-button-primary text-xs py-1.5 px-3"
-                  >
-                    <span>Open Target</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                )}
-              </div>
+            <div className="bg-[#0b0e14] border border-[#1f293d] px-3 py-1.5 rounded flex items-center gap-1.5 text-xs font-mono text-amber-400 font-bold">
+              <Award className="w-4 h-4 text-amber-400" />
+              <span>{challenge.points} PTS</span>
             </div>
           </div>
 
-          {/* Description / Scenario */}
+          {/* Docker Container Target Status Bar */}
+          <div className="p-3.5 bg-[#0b0e14] border border-[#1f293d] rounded flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <Terminal className="w-4 h-4 text-[#10b981]" />
+              <span className="text-slate-400">TARGET HOST:</span>
+              <a
+                href={challengeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#10b981] hover:underline font-semibold"
+              >
+                {challengeUrl}
+              </a>
+            </div>
+
+            <div>
+              {containerStatus.loading ? (
+                <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                  <Activity className="w-3.5 h-3.5 animate-spin text-[#10b981]" />
+                  Checking Port...
+                </span>
+              ) : (
+                <a
+                  href={challengeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="htb-btn-primary text-xs py-1 px-3"
+                >
+                  <span>ACCESS TARGET</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Scenario & Objective */}
           <div>
-            <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
-              Scenario & Objective
-            </h4>
-            <div className="bg-slate-950/60 p-4 rounded-lg border border-slate-800 text-sm leading-relaxed text-slate-300 font-sans">
+            <div className="text-xs font-mono uppercase text-slate-400 font-semibold mb-2 flex items-center gap-1.5">
+              <span>$</span> Scenario Briefing & Objective
+            </div>
+            <div className="bg-[#0b0e14] p-4 rounded border border-[#1f293d] text-xs font-mono text-slate-300 leading-relaxed">
               {challenge.description}
             </div>
           </div>
 
-          {/* Hints Section */}
+          {/* Progressive Hints */}
           {challenge.hints && challenge.hints.length > 0 && (
             <div>
-              <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-cyan-400" />
-                Available Hints
-              </h4>
+              <div className="text-xs font-mono uppercase text-slate-400 font-semibold mb-2 flex items-center gap-1.5">
+                <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Progressive Intel / Hints</span>
+              </div>
               <div className="space-y-2">
                 {challenge.hints.map((hint, idx) => {
                   const isRevealed = revealedHints.includes(idx);
                   return (
                     <div
                       key={idx}
-                      className="bg-slate-950/60 border border-slate-800 rounded-lg overflow-hidden text-xs"
+                      className="bg-[#0b0e14] border border-[#1f293d] rounded overflow-hidden text-xs font-mono"
                     >
                       <button
                         onClick={() => toggleHint(idx)}
-                        className="w-full px-4 py-2.5 text-left font-mono font-medium text-slate-300 hover:text-cyan-400 flex items-center justify-between transition-colors"
+                        className="w-full px-3.5 py-2 text-left text-slate-300 hover:text-cyan-400 flex items-center justify-between transition-colors bg-[#121824]"
                       >
-                        <span>Hint #{idx + 1}</span>
+                        <span className="flex items-center gap-2">
+                          <Lock className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Hint #{idx + 1}</span>
+                        </span>
                         <span className="text-cyan-400 text-xs">
-                          {isRevealed ? 'Hide Hint' : 'Reveal Hint'}
+                          {isRevealed ? '[ HIDE INTEL ]' : '[ REVEAL INTEL ]'}
                         </span>
                       </button>
                       {isRevealed && (
-                        <div className="px-4 py-3 bg-cyan-950/20 border-t border-slate-800 text-cyan-200 font-mono text-xs leading-relaxed">
+                        <div className="p-3 bg-cyan-950/20 border-t border-[#1f293d] text-cyan-200 leading-relaxed">
                           {hint.content}
                         </div>
                       )}
@@ -206,33 +225,33 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
             </div>
           )}
 
-          {/* Feedback Banner */}
+          {/* Feedback Alert Banner */}
           {feedback && (
             <div
-              className={`p-4 rounded-lg border flex items-center gap-3 text-sm font-medium ${
+              className={`p-3 rounded border text-xs font-mono flex items-center gap-2.5 ${
                 feedback.type === 'success'
-                  ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300'
-                  : 'bg-red-950/40 border-red-500/50 text-red-300'
+                  ? 'bg-emerald-950/30 border-[#10b981]/50 text-[#10b981]'
+                  : 'bg-red-950/30 border-red-500/50 text-red-400'
               }`}
             >
               {feedback.type === 'success' ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#10b981] flex-shrink-0" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
               )}
               <span>{feedback.message}</span>
             </div>
           )}
 
-          {/* Flag Submission Form */}
-          <form onSubmit={handleSubmitFlag} className="space-y-3 pt-2">
-            <label className="block text-xs font-mono text-slate-400 uppercase tracking-wider">
-              Submit Discovered Flag
+          {/* Flag Submission Terminal Form */}
+          <form onSubmit={handleSubmitFlag} className="space-y-2 pt-2">
+            <label className="block text-xs font-mono text-slate-400 uppercase font-semibold">
+              $ submit_flag --flag=
             </label>
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Flag className="w-4 h-4 text-slate-500" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 font-mono text-xs">
+                  <Flag className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="text"
@@ -240,16 +259,16 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
                   onChange={(e) => setFlagInput(e.target.value)}
                   placeholder="flag{...}"
                   disabled={challenge.isSolved || submitting}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono transition-colors"
+                  className="w-full pl-9 pr-4 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#10b981] font-mono transition-colors"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={submitting || challenge.isSolved || !flagInput.trim()}
-                className="cyber-button-primary disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm px-5"
+                className="htb-btn-primary disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-xs px-4"
               >
-                {submitting ? 'Validating...' : challenge.isSolved ? 'Solved' : 'Submit Flag'}
+                {submitting ? 'VALIDATING...' : challenge.isSolved ? 'SOLVED' : 'SUBMIT FLAG'}
               </button>
             </div>
           </form>

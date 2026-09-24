@@ -1,88 +1,129 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './services/AuthContext';
-import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
+import Challenges from './pages/Challenges';
+import Leaderboard from './pages/Leaderboard';
+import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Leaderboard from './pages/Leaderboard';
 import Admin from './pages/Admin';
 
-// Protected Route Wrapper for Logged-In Contestants
+// Helper component to resolve current page title for the Header bar
+const GetPageTitle = () => {
+  const location = useLocation();
+  switch (location.pathname) {
+    case '/':
+      return 'LAB DASHBOARD';
+    case '/challenges':
+      return 'TARGET MATRIX';
+    case '/leaderboard':
+      return 'GLOBAL STANDINGS';
+    case '/profile':
+      return 'MY PROFILE & AUDIT LOGS';
+    case '/admin':
+      return 'ADMINISTRATIVE CONTROLS';
+    default:
+      return 'LAB ARENA';
+  }
+};
+
+// Layout wrapper for authenticated contestant session
+const AppLayout = ({ children }) => {
+  return (
+    <div className="flex min-h-screen bg-[#0b0e14] text-slate-300 font-sans">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <Header pageTitle={<GetPageTitle />} />
+        <main className="p-6 md:p-8 flex-1">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+// Protected Route Guard for logged-in users
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-emerald-400 font-mono text-sm">
-        Initializing CyberVault Authentication...
+      <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center text-[#10b981] font-mono text-xs">
+        Initializing Security Lab Authenticator...
       </div>
     );
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return isAuthenticated ? <AppLayout>{children}</AppLayout> : <Navigate to="/login" replace />;
 };
 
-// Admin Route Wrapper
+// Admin Route Guard
 const AdminRoute = ({ children }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-purple-400 font-mono text-sm">
-        Verifying Admin Credentials...
+      <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center text-purple-400 font-mono text-xs">
+        Verifying Administrative Credentials...
       </div>
     );
   }
 
-  return isAuthenticated && isAdmin ? children : <Navigate to="/" replace />;
+  return isAuthenticated && isAdmin ? <AppLayout>{children}</AppLayout> : <Navigate to="/" replace />;
 };
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans">
-          <Navbar />
-          <main className="flex-1 pb-12">
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/leaderboard"
-                element={
-                  <ProtectedRoute>
-                    <Leaderboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <AdminRoute>
-                    <Admin />
-                  </AdminRoute>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          {/* Footer */}
-          <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs font-mono text-slate-400">
-            <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-              <span>CyberVault CTF Platform &copy; 2026 | IE3132 Penetration Testing</span>
-              <span className="text-emerald-400">Isolated Docker Sandbox Environment</span>
-            </div>
-          </footer>
-        </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenges"
+            element={
+              <ProtectedRoute>
+                <Challenges />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <ProtectedRoute>
+                <Leaderboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
