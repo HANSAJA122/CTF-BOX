@@ -42,7 +42,7 @@ const Register = () => {
             REGISTER CONTESTANT
           </h1>
           <p className="text-[10px] text-slate-500 mt-1 uppercase">
-            Create Your Google CTF Handle
+            Create Your CyberVault Handle
           </p>
         </div>
 

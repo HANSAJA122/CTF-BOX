@@ -49,7 +49,7 @@ const Leaderboard = () => {
         <div>
           <div className="flex items-center gap-2 text-xs text-[#fbbc04] font-bold uppercase mb-1">
             <Trophy className="w-4 h-4 text-[#fbbc04]" />
-            <span>Google CTF Official Scoreboard</span>
+            <span>CyberVault Official Scoreboard</span>
           </div>
           <h1 className="text-xl font-bold text-slate-100">Live Contestant Standings</h1>
           <p className="text-xs text-slate-400 mt-1">

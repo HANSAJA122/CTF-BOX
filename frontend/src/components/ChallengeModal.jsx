@@ -62,7 +62,7 @@ const ChallengeModal = ({ challenge, onClose, onSubmissionSuccess }) => {
             <span className="w-3 h-3 rounded-full bg-[#ea4335] inline-block"></span>
             <span className="w-3 h-3 rounded-full bg-[#fbbc04] inline-block"></span>
             <span className="w-3 h-3 rounded-full bg-[#34a853] inline-block"></span>
-            <span className="text-slate-300 font-bold ml-2">GOOGLE CTF TASK // {challenge.title}</span>
+            <span className="text-slate-300 font-bold ml-2">CYBERVAULT TASK // {challenge.title}</span>
           </div>
 
           <button

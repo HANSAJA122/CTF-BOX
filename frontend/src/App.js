@@ -20,7 +20,7 @@ const AppLayout = ({ children }) => {
       {/* Footer */}
       <footer className="border-t border-[#1e293b] bg-[#080b14] py-4 text-center text-xs text-slate-500 font-mono">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-2">
-          <span>Google CTF Style // SLIIT Security Labs &copy; 2026</span>
+          <span>CyberVault CTF // SLIIT Security Labs &copy; 2026</span>
           <span className="text-[#34a853]">Isolated Docker Challenge Network</span>
         </div>
       </footer>
@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children }) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0c101c] flex items-center justify-center text-[#4285f4] font-mono text-xs">
-        Connecting to Google CTF Authenticator...
+        Connecting to CyberVault Authenticator...
       </div>
     );
   }

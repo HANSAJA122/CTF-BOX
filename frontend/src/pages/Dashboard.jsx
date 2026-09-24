@@ -63,24 +63,20 @@ const Dashboard = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-      {/* Google CTF Retro ASCII Header Banner */}
+      {/* Retro ASCII Header Banner */}
       <div className="gctf-card p-6 bg-[#080b14] border-[#1e293b] font-mono select-none">
         <pre className="text-[10px] md:text-xs text-[#4285f4] font-bold overflow-x-auto leading-none mb-4 hidden sm:block">
-{`   ___  ___   ___  ___  _    ___   ___ _____ ___ 
-  / __|/ _ \ / _ \/ __|| |  | __| / __|_   _| __|
- | (_ | (_) | (_) \__ \| |__| _| | (__  | | | _| 
-  \___|\___/ \___/|___/|____|___| \___| |_| |_|  `}
+{`   ___ _   _ ___  _____ ____  __   ___   _ _   _ _   _____ 
+  / __| | | | _ )| ____|  _ \ \ \ / / \ | | | | | | |_   _|
+ | (__| |_| | _ \|  _| | |_) | \ V /| |_| | |_| | |___| |  
+  \___|\___/|___/|____|_| \_\   \_/  \___/ \___/|_____|_|  `}
         </pre>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-[#1e293b] pt-4">
           <div>
             <h1 className="text-xl font-pixel text-slate-100">
-              <span className="text-[#4285f4]">G</span>
-              <span className="text-[#ea4335]">o</span>
-              <span className="text-[#fbbc04]">o</span>
-              <span className="text-[#4285f4]">g</span>
-              <span className="text-[#34a853]">l</span>
-              <span className="text-[#ea4335]">e</span> CTF // LAB ARENA
+              <span className="text-[#4285f4]">CYBER</span>
+              <span className="text-[#34a853]">VAULT</span> CTF // LAB ARENA
             </h1>
             <p className="text-xs text-slate-400 mt-1 font-mono">
               Welcome contestant <strong className="text-slate-100">{user?.username}</strong>. Solve vulnerability tasks, capture flags, and climb the scoreboard.
@@ -104,7 +100,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Domain Category Filter Tabs (Google CTF Style) */}
+      {/* Domain Category Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-mono text-xs">
         {categories.map((cat) => {
           const isSelected = selectedCategory === cat;
@@ -160,11 +156,11 @@ const Dashboard = () => {
       {loading ? (
         <div className="py-16 text-center font-mono text-xs text-slate-500">
           <RefreshCw className="w-6 h-6 text-[#4285f4] animate-spin mx-auto mb-2" />
-          <span>Fetching Google CTF tasks...</span>
+          <span>Fetching CTF tasks...</span>
         </div>
       ) : filteredChallenges.length === 0 ? (
         <div className="gctf-card p-12 text-center font-mono text-xs text-slate-500">
-          No Google CTF tasks match your query filters.
+          No CTF tasks match your query filters.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

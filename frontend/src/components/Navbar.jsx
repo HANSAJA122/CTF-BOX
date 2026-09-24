@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
-import { Flag, Terminal, Trophy, User, PlusCircle, LogOut, Award } from 'lucide-react';
+import { Flag, User, LogOut, Award } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
@@ -24,12 +24,8 @@ const Navbar = () => {
           </div>
           <div>
             <div className="font-pixel text-xs text-slate-100 tracking-wider">
-              <span className="text-[#4285f4]">G</span>
-              <span className="text-[#ea4335]">o</span>
-              <span className="text-[#fbbc04]">o</span>
-              <span className="text-[#4285f4]">g</span>
-              <span className="text-[#34a853]">l</span>
-              <span className="text-[#ea4335]">e</span> CTF // CYBERVAULT
+              <span className="text-[#4285f4]">CYBER</span>
+              <span className="text-[#34a853]">VAULT</span> CTF
             </div>
             <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-0.5">
               SLIIT Security Range
@@ -37,7 +33,7 @@ const Navbar = () => {
           </div>
         </NavLink>
 
-        {/* Navigation Tabs (Google CTF Style) */}
+        {/* Navigation Tabs */}
         <div className="flex items-center gap-1 bg-[#101625] border border-[#1e293b] p-1 rounded font-mono text-xs">
           <NavLink
             to="/"
