@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
-import { Terminal, Lock, Mail, User, AlertCircle, ArrowRight } from 'lucide-react';
+import { Terminal, AlertCircle } from 'lucide-react';
 
 const Register = () => {
   const { register } = useAuth();
@@ -25,112 +25,86 @@ const Register = () => {
       await register(formData.username, formData.email, formData.password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Choose a different username or email.');
+      setError(err.response?.data?.message || '[-] Registration failed. Choose another handle.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center p-4 selection:bg-[#10b981]/30 select-none">
+    <div className="min-h-screen bg-[#05080c] flex items-center justify-center p-4 font-mono text-xs select-none">
       <div className="w-full max-w-md">
-        {/* Brand Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex p-3 bg-[#121824] border border-[#1f293d] rounded mb-3 text-[#10b981]">
-            <Terminal className="w-8 h-8" />
+        <div className="bg-[#090d14] border border-[#1c2436] p-3 text-center mb-3">
+          <div className="flex items-center justify-center gap-2 font-bold text-slate-100 text-sm">
+            <Terminal className="w-4 h-4 text-[#10b981]" />
+            <span>CREATE CONTESTANT HANDLE</span>
           </div>
-          <h1 className="text-xl font-mono font-bold text-slate-100 tracking-wider">
-            REGISTER CONTESTANT
-          </h1>
-          <p className="text-xs font-mono text-slate-500 mt-1 uppercase">
-            Create Your SLIIT Security Labs Handle
-          </p>
+          <div className="text-[10px] text-slate-500 mt-0.5">
+            SLIIT Security Range Registration
+          </div>
         </div>
 
-        {/* Card Form */}
-        <div className="htb-card p-6 border-[#1f293d] bg-[#121824] shadow-2xl">
+        <div className="soc-panel p-4">
           {error && (
-            <div className="mb-4 p-3 bg-red-950/40 border border-red-500/50 rounded text-xs font-mono text-red-300 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+            <div className="mb-3 p-2 bg-red-950/30 border border-red-500 text-red-400 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-slate-400 uppercase font-semibold mb-1.5">
-                $ input_handle
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                  <User className="w-3.5 h-3.5" />
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  placeholder="cyber_hacker"
-                  className="w-full pl-9 pr-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#10b981]"
-                />
-              </div>
+              <label className="block text-slate-400 font-bold mb-1 uppercase">$ contestant_handle:</label>
+              <input
+                type="text"
+                required
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                placeholder="cyber_hacker"
+                className="w-full px-3 py-1.5 bg-[#05080c] border border-[#1c2436] text-slate-100 placeholder-slate-700 focus:outline-none focus:border-[#10b981]"
+              />
             </div>
 
             <div>
-              <label className="block text-slate-400 uppercase font-semibold mb-1.5">
-                $ input_email
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                  <Mail className="w-3.5 h-3.5" />
-                </div>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="hacker@cybervault.edu"
-                  className="w-full pl-9 pr-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#10b981]"
-                />
-              </div>
+              <label className="block text-slate-400 font-bold mb-1 uppercase">$ email_address:</label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="hacker@cybervault.edu"
+                className="w-full px-3 py-1.5 bg-[#05080c] border border-[#1c2436] text-slate-100 placeholder-slate-700 focus:outline-none focus:border-[#10b981]"
+              />
             </div>
 
             <div>
-              <label className="block text-slate-400 uppercase font-semibold mb-1.5">
-                $ set_password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                  <Lock className="w-3.5 h-3.5" />
-                </div>
-                <input
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="At least 6 characters"
-                  className="w-full pl-9 pr-3 py-2 bg-[#0b0e14] border border-[#1f293d] rounded text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#10b981]"
-                />
-              </div>
+              <label className="block text-slate-400 font-bold mb-1 uppercase">$ set_passphrase:</label>
+              <input
+                type="password"
+                required
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                placeholder="At least 6 characters"
+                className="w-full px-3 py-1.5 bg-[#05080c] border border-[#1c2436] text-slate-100 placeholder-slate-700 focus:outline-none focus:border-[#10b981]"
+              />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="htb-btn-primary w-full py-2.5 font-bold mt-2"
+              className="soc-btn-green w-full py-1.5 justify-center font-bold uppercase mt-2"
             >
-              <span>{loading ? 'CREATING HANDLE...' : 'CREATE LAB ACCOUNT'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              {loading ? '[ REGISTERING... ]' : '[ REGISTER HANDLE ]'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-xs font-mono text-slate-500 mt-4">
-          Already registered?{' '}
-          <Link to="/login" className="text-[#10b981] font-semibold hover:underline">
+        <div className="text-center text-[10px] text-slate-500 mt-3">
+          Registered contestant?{' '}
+          <Link to="/login" className="text-[#10b981] hover:underline font-bold">
             Sign in here
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

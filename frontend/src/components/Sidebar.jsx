@@ -9,7 +9,7 @@ import {
   User,
   PlusCircle,
   LogOut,
-  ShieldAlert,
+  Shield,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -24,104 +24,100 @@ const Sidebar = () => {
   if (!isAuthenticated) return null;
 
   return (
-    <aside className="w-64 bg-[#0d1117] border-r border-[#1f293d] min-h-screen flex flex-col justify-between flex-shrink-0 z-30 select-none">
+    <aside className="w-56 bg-[#070a0f] border-r border-[#1c2436] min-h-screen flex flex-col justify-between flex-shrink-0 z-30 select-none">
       <div>
-        {/* Platform Brand Header */}
-        <div className="p-5 border-b border-[#1f293d] flex items-center gap-3">
-          <div className="p-2 bg-[#10b981]/10 border border-[#10b981]/30 rounded text-[#10b981]">
-            <Terminal className="w-5 h-5" />
-          </div>
+        {/* Header Header */}
+        <div className="p-3 border-b border-[#1c2436] bg-[#090d14] flex items-center gap-2">
+          <Terminal className="w-4 h-4 text-[#10b981]" />
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-mono font-bold text-slate-100 tracking-tight text-base">
-                CYBER<span className="text-[#10b981]">VAULT</span>
-              </span>
+            <div className="font-mono font-bold text-slate-100 text-xs tracking-wider">
+              CYBER<span className="text-[#10b981]">VAULT</span>
             </div>
-            <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-              SLIIT Security Labs
-            </p>
+            <div className="text-[9px] font-mono text-slate-500 uppercase">
+              SLIIT SECURITY RANGE v2.4
+            </div>
           </div>
         </div>
 
-        {/* Navigation Section */}
-        <div className="p-3 space-y-1">
-          <div className="px-3 py-2 text-[10px] font-mono uppercase text-slate-500 tracking-wider font-semibold">
-            Lab Navigation
+        {/* Navigation List */}
+        <div className="p-2 space-y-0.5">
+          <div className="px-2 py-1.5 text-[9px] font-mono uppercase text-slate-500 tracking-wider font-semibold">
+            NAVIGATION
           </div>
 
           <NavLink
             to="/"
             end
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded text-xs font-mono font-medium transition-all ${
+              `flex items-center gap-2 px-2.5 py-1.5 rounded-sm text-xs font-mono transition-colors ${
                 isActive
-                  ? 'bg-[#1a2332] text-[#10b981] border-l-2 border-[#10b981] font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#121824]'
+                  ? 'bg-[#141a27] text-[#10b981] font-bold border-l-2 border-[#10b981]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#0d111a]'
               }`
             }
           >
-            <LayoutDashboard className="w-4 h-4" />
+            <LayoutDashboard className="w-3.5 h-3.5" />
             <span>Dashboard</span>
           </NavLink>
 
           <NavLink
             to="/challenges"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded text-xs font-mono font-medium transition-all ${
+              `flex items-center gap-2 px-2.5 py-1.5 rounded-sm text-xs font-mono transition-colors ${
                 isActive
-                  ? 'bg-[#1a2332] text-[#10b981] border-l-2 border-[#10b981] font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#121824]'
+                  ? 'bg-[#141a27] text-[#10b981] font-bold border-l-2 border-[#10b981]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#0d111a]'
               }`
             }
           >
-            <Target className="w-4 h-4" />
-            <span>CTF Challenges</span>
+            <Target className="w-3.5 h-3.5" />
+            <span>Challenges</span>
           </NavLink>
 
           <NavLink
             to="/leaderboard"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded text-xs font-mono font-medium transition-all ${
+              `flex items-center gap-2 px-2.5 py-1.5 rounded-sm text-xs font-mono transition-colors ${
                 isActive
-                  ? 'bg-[#1a2332] text-[#10b981] border-l-2 border-[#10b981] font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#121824]'
+                  ? 'bg-[#141a27] text-[#10b981] font-bold border-l-2 border-[#10b981]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#0d111a]'
               }`
             }
           >
-            <Trophy className="w-4 h-4" />
+            <Trophy className="w-3.5 h-3.5" />
             <span>Leaderboard</span>
           </NavLink>
 
           <NavLink
             to="/profile"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded text-xs font-mono font-medium transition-all ${
+              `flex items-center gap-2 px-2.5 py-1.5 rounded-sm text-xs font-mono transition-colors ${
                 isActive
-                  ? 'bg-[#1a2332] text-[#10b981] border-l-2 border-[#10b981] font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#121824]'
+                  ? 'bg-[#141a27] text-[#10b981] font-bold border-l-2 border-[#10b981]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-[#0d111a]'
               }`
             }
           >
-            <User className="w-4 h-4" />
-            <span>My Profile</span>
+            <User className="w-3.5 h-3.5" />
+            <span>User Profile</span>
           </NavLink>
 
           {isAdmin && (
-            <div className="pt-4 space-y-1">
-              <div className="px-3 py-1 text-[10px] font-mono uppercase text-purple-400 tracking-wider font-semibold">
-                Admin Controls
+            <div className="pt-3 space-y-0.5">
+              <div className="px-2 py-1 text-[9px] font-mono uppercase text-purple-400 tracking-wider font-semibold">
+                ADMINISTRATION
               </div>
               <NavLink
                 to="/admin"
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2.5 rounded text-xs font-mono font-medium transition-all ${
+                  `flex items-center gap-2 px-2.5 py-1.5 rounded-sm text-xs font-mono transition-colors ${
                     isActive
-                      ? 'bg-purple-950/40 text-purple-400 border-l-2 border-purple-500 font-semibold'
-                      : 'text-slate-400 hover:text-purple-300 hover:bg-[#121824]'
+                      ? 'bg-purple-950/40 text-purple-400 font-bold border-l-2 border-purple-500'
+                      : 'text-slate-400 hover:text-purple-300 hover:bg-[#0d111a]'
                   }`
                 }
               >
-                <PlusCircle className="w-4 h-4 text-purple-400" />
+                <PlusCircle className="w-3.5 h-3.5 text-purple-400" />
                 <span>Manage Stages</span>
               </NavLink>
             </div>
@@ -129,29 +125,24 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Footer User Info & Logout */}
-      <div className="p-3 border-t border-[#1f293d] bg-[#0b0e14]">
-        <div className="flex items-center justify-between p-2 rounded bg-[#121824] border border-[#1f293d]">
-          <div className="flex items-center gap-2.5 truncate">
-            <div className="w-7 h-7 rounded bg-[#1f293d] border border-slate-700 flex items-center justify-center font-mono text-xs text-slate-200 font-bold uppercase">
-              {user?.username ? user.username.charAt(0) : 'U'}
+      {/* Footer User Info & Exit */}
+      <div className="p-2 border-t border-[#1c2436] bg-[#090d14]">
+        <div className="flex items-center justify-between p-1.5 bg-[#05080c] border border-[#1c2436]">
+          <div className="truncate">
+            <div className="text-[11px] font-mono font-bold text-slate-200 truncate">
+              {user?.username}
             </div>
-            <div className="truncate text-left">
-              <div className="text-xs font-mono font-semibold text-slate-200 truncate">
-                {user?.username}
-              </div>
-              <div className="text-[10px] font-mono text-[#10b981] font-bold">
-                {user?.score || 0} Pts
-              </div>
+            <div className="text-[10px] font-mono text-[#10b981]">
+              {user?.score || 0} PTS
             </div>
           </div>
 
           <button
             onClick={handleLogout}
-            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded transition-colors"
-            title="Log Out"
+            className="p-1 text-slate-500 hover:text-red-400 hover:bg-red-950/30 transition-colors"
+            title="Disconnect Session"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

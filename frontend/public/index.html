@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b0e14" />
+    <meta name="theme-color" content="#05080c" />
     <meta
       name="description"
-      content="CyberVault CTF Platform - HackTheBox & TryHackMe Inspired Penetration Testing Platform"
+      content="CyberVault CTF Range - Professional Cybersecurity Laboratory Interface"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,33 +19,31 @@
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+              sans: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+              mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
             },
             colors: {
-              htb: {
-                bg: '#0b0e14',
-                sidebar: '#0d1117',
-                card: '#121824',
-                cardHover: '#172030',
-                border: '#1f293d',
-                borderHover: '#2d3b55',
+              soc: {
+                bg: '#05080c',
+                panel: '#090d14',
+                header: '#0d111a',
+                border: '#1c2436',
+                borderHighlight: '#2a3650',
                 green: '#10b981',
                 cyan: '#06b6d4',
                 red: '#ef4444',
                 amber: '#f59e0b',
-                muted: '#64748b',
-                text: '#94a3b8',
-                bright: '#f1f5f9',
+                text: '#8c9ba5',
+                bright: '#d1d5db',
               }
             }
           }
         }
       }
     </script>
-    <title>CyberVault CTF | Security Labs</title>
+    <title>CyberVault CTF // Security Range</title>
   </head>
-  <body class="bg-[#0b0e14] text-slate-200 font-sans antialiased min-h-screen selection:bg-emerald-500/30 selection:text-emerald-300">
+  <body class="bg-[#05080c] text-[#8c9ba5] font-mono antialiased min-h-screen selection:bg-[#10b981]/30 selection:text-[#10b981]">
     <noscript>You need to enable JavaScript to run this application.</noscript>
     <div id="root"></div>
   </body>

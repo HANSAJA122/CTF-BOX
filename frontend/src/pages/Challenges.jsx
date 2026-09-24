@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import ChallengeCard from '../components/ChallengeCard';
 import ChallengeModal from '../components/ChallengeModal';
-import { Target, Search, Filter, RefreshCw, CheckCircle2, Shield } from 'lucide-react';
+import { Terminal, RefreshCw, Search } from 'lucide-react';
 
 const Challenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -13,7 +12,6 @@ const Challenges = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
-  const [statusFilter, setStatusFilter] = useState('All');
 
   const fetchChallenges = async () => {
     setLoading(true);
@@ -42,127 +40,134 @@ const Challenges = () => {
     }
   };
 
-  const categories = useMemo(() => {
-    const set = new Set(challenges.map((c) => c.category));
-    return ['All', ...Array.from(set)];
-  }, [challenges]);
+  const categories = ['All', 'OSINT Reconnaissance', 'Steganography', 'Web Security', 'Cryptography', 'Digital Forensics', 'Linux Security'];
 
-  const filteredChallenges = useMemo(() => {
-    return challenges.filter((ch) => {
-      const matchesSearch =
-        ch.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ch.category.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || ch.category === selectedCategory;
-      const matchesDifficulty = selectedDifficulty === 'All' || ch.difficulty === selectedDifficulty;
-      const matchesStatus =
-        statusFilter === 'All' ||
-        (statusFilter === 'Solved' && ch.isSolved) ||
-        (statusFilter === 'Unsolved' && !ch.isSolved);
-
-      return matchesSearch && matchesCategory && matchesDifficulty && matchesStatus;
-    });
-  }, [challenges, searchQuery, selectedCategory, selectedDifficulty, statusFilter]);
+  const filteredChallenges = challenges.filter((ch) => {
+    const matchesSearch =
+      ch.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ch.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || ch.category === selectedCategory;
+    const matchesDifficulty = selectedDifficulty === 'All' || ch.difficulty === selectedDifficulty;
+    return matchesSearch && matchesCategory && matchesDifficulty;
+  });
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-[#1f293d] pb-5">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#10b981] font-semibold uppercase mb-1">
-            <Target className="w-4 h-4" />
-            <span>Lab Arena</span>
-          </div>
-          <h1 className="text-2xl font-mono font-bold text-slate-100">CTF Target Directory</h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Browse all available vulnerability boxes across OSINT, Steganography, Web Security, Cryptography, Forensics, and Linux Security.
-          </p>
-        </div>
-
-        <button
-          onClick={fetchChallenges}
-          className="htb-btn-secondary text-xs flex items-center gap-2"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#10b981]' : ''}`} />
-          <span>Refresh Directory</span>
-        </button>
-      </div>
-
-      {/* Domain Category Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#1f293d]">
-        {categories.map((cat) => {
-          const isSelected = selectedCategory === cat;
-          return (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded text-xs font-mono whitespace-nowrap transition-all ${
-                isSelected
-                  ? 'bg-[#10b981] text-[#0b0e14] font-bold'
-                  : 'bg-[#121824] text-slate-400 hover:text-slate-200 border border-[#1f293d]'
-              }`}
-            >
-              {cat === 'All' ? 'ALL DOMAINS' : cat.toUpperCase()}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Search and Secondary Filters Toolbar */}
-      <div className="htb-card p-3 flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="relative w-full md:w-80">
-          <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+    <div className="space-y-3">
+      {/* Search Toolbar */}
+      <div className="soc-panel p-2.5 flex flex-col md:flex-row items-center justify-between gap-2">
+        <div className="flex items-center gap-2 w-full md:w-auto">
           <input
             type="text"
-            placeholder="Search title, category, or port..."
+            placeholder="Search ID, Name, or Domain..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-[#0b0e14] border border-[#1f293d] rounded text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#10b981]"
+            className="px-2.5 py-1 bg-[#05080c] border border-[#1c2436] rounded-none text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#10b981] w-full md:w-64"
           />
-        </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="bg-[#05080c] border border-[#1c2436] text-slate-300 py-1 px-2 focus:outline-none focus:border-[#10b981]"
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                Category: {cat}
+              </option>
+            ))}
+          </select>
+
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="bg-[#0b0e14] border border-[#1f293d] text-slate-300 text-xs py-1.5 px-3 rounded focus:outline-none focus:border-[#10b981] font-mono"
+            className="bg-[#05080c] border border-[#1c2436] text-slate-300 py-1 px-2 focus:outline-none focus:border-[#10b981]"
           >
             <option value="All">Difficulty: All</option>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
           </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-[#0b0e14] border border-[#1f293d] text-slate-300 text-xs py-1.5 px-3 rounded focus:outline-none focus:border-[#10b981] font-mono"
-          >
-            <option value="All">Status: All</option>
-            <option value="Unsolved">Status: Unsolved</option>
-            <option value="Solved">Status: Solved</option>
-          </select>
         </div>
+
+        <button onClick={fetchChallenges} className="soc-btn-secondary py-1 px-3">
+          <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin text-[#10b981]' : ''}`} />
+          <span>RELOAD MATRIX</span>
+        </button>
       </div>
 
-      {/* Grid of Targets */}
-      {loading ? (
-        <div className="py-16 text-center font-mono text-xs text-slate-500">
-          <RefreshCw className="w-6 h-6 text-[#10b981] animate-spin mx-auto mb-2" />
-          <span>Fetching targets from Docker engine...</span>
+      {/* Main Required Table Layout */}
+      <div className="soc-panel">
+        <div className="soc-panel-header">
+          <span>TARGET STAGES TABLE</span>
+          <span>COUNT: {filteredChallenges.length}</span>
         </div>
-      ) : filteredChallenges.length === 0 ? (
-        <div className="htb-card p-12 text-center text-xs font-mono text-slate-500">
-          No target stages match the selected filters.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredChallenges.map((ch) => (
-            <ChallengeCard key={ch._id} challenge={ch} onOpenModal={(c) => setSelectedChallenge(c)} />
-          ))}
-        </div>
-      )}
 
-      {/* Target Briefing Modal */}
+        {loading ? (
+          <div className="p-8 text-center text-slate-500 font-mono text-xs">
+            Querying target directory...
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="soc-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Difficulty</th>
+                  <th>Points</th>
+                  <th>Status</th>
+                  <th className="text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredChallenges.map((ch, idx) => {
+                  const chCode = `STAGE-300${idx + 1}`;
+                  return (
+                    <tr key={ch._id}>
+                      <td className="font-bold text-[#d1d5db]">{chCode}</td>
+                      <td className="font-bold text-slate-200">{ch.title}</td>
+                      <td>
+                        <span className="text-[#06b6d4]">{ch.category}</span>
+                      </td>
+                      <td>
+                        <span
+                          className={
+                            ch.difficulty === 'Easy'
+                              ? 'badge-easy'
+                              : ch.difficulty === 'Medium'
+                              ? 'badge-medium'
+                              : 'badge-hard'
+                          }
+                        >
+                          {ch.difficulty}
+                        </span>
+                      </td>
+                      <td className="text-amber-400 font-bold">{ch.points}</td>
+                      <td>
+                        {ch.isSolved ? (
+                          <span className="text-[#06b6d4] font-bold">[SOLVED]</span>
+                        ) : (
+                          <span className="text-[#10b981] font-bold">[OPEN]</span>
+                        )}
+                      </td>
+                      <td className="text-right">
+                        <button
+                          onClick={() => setSelectedChallenge(ch)}
+                          className="soc-btn-green py-0.5 px-2 text-[10px]"
+                        >
+                          <span>{ch.isSolved ? 'REVIEW' : 'INSPECT'}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Challenge Inspector Modal */}
       {selectedChallenge && (
         <ChallengeModal
           challenge={selectedChallenge}

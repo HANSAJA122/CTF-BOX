@@ -1,168 +1,156 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-shadow: none !important;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #0b0e14;
-  color: #94a3b8;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  background-color: #05080c;
+  color: #8c9ba5;
   min-height: 100vh;
   overflow-x: hidden;
+  font-size: 12px;
 }
 
-code, pre, .font-mono {
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* Custom Scrollbar */
+/* Custom Thin Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0e14;
+  background: #05080c;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1f293d;
-  border-radius: 3px;
+  background: #1c2436;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2d3b55;
+  background: #2a3650;
 }
 
-/* Sharp HTB / TryHackMe Card Styling */
-.htb-card {
-  background-color: #121824;
-  border: 1px solid #1f293d;
-  border-radius: 6px;
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+/* SOC Panel Component */
+.soc-panel {
+  background-color: #090d14;
+  border: 1px solid #1c2436;
+  border-radius: 2px;
 }
 
-.htb-card:hover {
-  border-color: #2d3b55;
-}
-
-.htb-card-active {
-  border-color: rgba(16, 185, 129, 0.4);
-}
-
-/* Primary HTB Green Action Button */
-.htb-btn-primary {
-  background-color: #10b981;
-  color: #0b0e14;
+.soc-panel-header {
+  background-color: #0d111a;
+  border-b: 1px solid #1c2436;
+  padding: 6px 12px;
+  font-size: 11px;
   font-weight: 700;
-  font-size: 0.875rem;
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
+  text-transform: uppercase;
+  color: #d1d5db;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  justify-content: space-between;
 }
 
-.htb-btn-primary:hover {
-  background-color: #34d399;
+/* Dense SOC Table Styling */
+.soc-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 11px;
 }
 
-.htb-btn-secondary {
-  background-color: #1a2332;
-  color: #cbd5e1;
+.soc-table th {
+  background-color: #0d111a;
+  border-bottom: 1px solid #1c2436;
+  color: #6b7280;
+  padding: 6px 12px;
   font-weight: 600;
-  font-size: 0.875rem;
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: 1px solid #2d3b55;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-
-.htb-btn-secondary:hover {
-  background-color: #232d42;
-  color: #ffffff;
-  border-color: #3b4c6b;
-}
-
-/* Difficulty Badges */
-.badge-easy {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.badge-medium {
-  background-color: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.badge-hard {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.badge-solved {
-  background-color: rgba(6, 182, 212, 0.1);
-  color: #06b6d4;
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-/* Category Domain Pill */
-.domain-pill {
-  background-color: #1a2332;
-  color: #94a3b8;
-  border: 1px solid #2d3b55;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 3px;
   text-transform: uppercase;
 }
 
-/* Status Indicators */
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
+.soc-table td {
+  padding: 6px 12px;
+  border-bottom: 1px solid #141a27;
+  color: #9ca3af;
 }
 
-.status-online {
+.soc-table tr:hover td {
+  background-color: #0d131f;
+  color: #e5e7eb;
+}
+
+/* SOC Buttons */
+.soc-btn-green {
   background-color: #10b981;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  color: #05080c;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid #10b981;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.status-offline {
-  background-color: #ef4444;
+.soc-btn-green:hover {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+.soc-btn-secondary {
+  background-color: #0d111a;
+  color: #9ca3af;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid #1c2436;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.soc-btn-secondary:hover {
+  background-color: #141a27;
+  color: #ffffff;
+  border-color: #2a3650;
+}
+
+/* Badges */
+.badge-easy {
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background-color: rgba(16, 185, 129, 0.05);
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 2px;
+}
+
+.badge-medium {
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  background-color: rgba(245, 158, 11, 0.05);
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 2px;
+}
+
+.badge-hard {
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background-color: rgba(239, 68, 68, 0.05);
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 2px;
+}
+
+.badge-solved {
+  color: #06b6d4;
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  background-color: rgba(6, 182, 212, 0.05);
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 2px;
 }
